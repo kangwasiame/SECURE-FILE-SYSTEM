@@ -1,0 +1,10 @@
+{
+  "name": "Vault Secure File Storage",
+  "short_name": "Vault",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f5ef",
+  "theme_color": "#1e624d",
+  "description": "Private, account-based file storage.",
+  "icons": []
+}

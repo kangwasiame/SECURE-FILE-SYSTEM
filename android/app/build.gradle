@@ -1,0 +1,23 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.vault.securestorage'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.vault.securestorage'
+        minSdk 23
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+
+        // Override with: ./gradlew assembleDebug -PserverUrl=https://your-domain.example
+        buildConfigField 'String', 'SERVER_URL', "\"${project.findProperty('serverUrl') ?: 'http://10.0.2.2:5000/'}\""
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+}

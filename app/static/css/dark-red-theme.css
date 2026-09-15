@@ -1,0 +1,102 @@
+:root {
+  --ink: #f6f1f2;
+  --muted: #c0aeb2;
+  --paper: #09090b;
+  --white: #171214;
+  --line: #422127;
+  --violet: #d62839;
+  --violet-dark: #ff5361;
+  --yellow: #ff3347;
+  --coral: #ff5966;
+  --mint: #5f1f2b;
+  --blue: #ff6974;
+}
+
+body {
+  background: #09090b;
+  color: #f6f1f2;
+}
+
+.topbar {
+  background: rgba(9, 9, 11, .92);
+  border-color: #422127;
+}
+
+main,
+footer {
+  background: #09090b;
+}
+
+footer {
+  color: #c0aeb2;
+  border-color: #422127;
+}
+
+.hero:after {
+  background: linear-gradient(90deg, #09090b 3%, rgba(9, 9, 11, .9) 50%, rgba(9, 9, 11, .45));
+}
+
+.hero:before {
+  background: #5f1f2b;
+}
+
+.nav-cta,
+.button,
+.demo-action,
+.text-button {
+  background: #d62839;
+  color: #fff;
+}
+
+.form-card,
+.dashboard-card,
+.walkthrough,
+.demo-screen,
+.file-card,
+.info-card,
+.auth-card {
+  background: #171214;
+  border-color: #422127;
+  color: #f6f1f2;
+}
+
+input,
+select,
+textarea,
+.demo-field,
+.demo-file {
+  background: #0f0d0e;
+  color: #f6f1f2;
+  border-color: #63303a;
+}
+
+input::placeholder {
+  color: #9e858b;
+}
+
+.demo-play,
+.demo-prev,
+.demo-next,
+.demo-progress button {
+  color: #ff5966;
+  border-color: #63303a;
+}
+
+.demo-progress button.active {
+  background: #d62839;
+}
+
+.notice.success {
+  background: #183d2b;
+  color: #aef0c9;
+}
+
+.notice.error {
+  background: #431b22;
+  color: #ffb5bc;
+}
+
+a:hover,
+.text-button:hover {
+  color: #ff6974;
+}

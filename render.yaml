@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: vault-secure-file-storage
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT wsgi:app
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATA_DIR
+        value: /opt/render/project/src/data
+      - key: PUBLIC_BASE_URL
+        value: https://vault-secure-file-storage.onrender.com
+    disk:
+      name: vault-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1

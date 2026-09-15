@@ -1,0 +1,556 @@
+{% extends "base.html" %}
+
+{% block title %}Tutorial{% endblock %}
+
+{% block content %}
+<style>
+    .tutorial-step {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-left: 5px solid #0d6efd;
+        transition: all 0.3s;
+    }
+    .tutorial-step:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .step-number {
+        background: #0d6efd;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+    .step-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .step-header h4 {
+        margin: 0;
+        color: #0d6efd;
+    }
+    .step-content {
+        padding-left: 55px;
+    }
+    .demo-box {
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 15px 0;
+    }
+    .feature-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .feature-item i {
+        font-size: 2rem;
+        color: #0d6efd;
+        margin-bottom: 10px;
+    }
+    .tip-box {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    .tip-box i {
+        color: #ffc107;
+        margin-right: 10px;
+    }
+    .warning-box {
+        background: #f8d7da;
+        border: 1px solid #dc3545;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    .warning-box i {
+        color: #dc3545;
+        margin-right: 10px;
+    }
+    .success-box {
+        background: #d4edda;
+        border: 1px solid #28a745;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    .success-box i {
+        color: #28a745;
+        margin-right: 10px;
+    }
+    .tutorial-nav {
+        position: sticky;
+        top: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .tutorial-nav a {
+        display: block;
+        padding: 8px 12px;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+    .tutorial-nav a:hover {
+        background: #0d6efd;
+        color: white;
+    }
+    .tutorial-nav a i {
+        margin-right: 10px;
+        width: 20px;
+    }
+    @media (max-width: 768px) {
+        .step-content {
+            padding-left: 0;
+        }
+        .step-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .step-number {
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="tutorial-nav">
+            <h5><i class="fas fa-list"></i> Quick Navigation</h5>
+            <hr>
+            <a href="#step1"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="#step2"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#step3"><i class="fas fa-upload"></i> Upload Files</a>
+            <a href="#step4"><i class="fas fa-share-alt"></i> Share Files</a>
+            <a href="#step5"><i class="fas fa-download"></i> Download Files</a>
+            <a href="#step6"><i class="fas fa-trash"></i> Delete Files</a>
+            <a href="#step7"><i class="fas fa-shield-alt"></i> Security Features</a>
+            <a href="#step8"><i class="fas fa-question-circle"></i> FAQ</a>
+            <hr>
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-sm w-100">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-graduation-cap"></i> Secure File Storage - User Tutorial</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Welcome to the Secure File Storage System! 
+                    This tutorial will guide you through all the features. 
+                    Follow the steps below to get started.
+                </div>
+
+                <!-- STEP 1: REGISTER -->
+                <div id="step1" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h4><i class="fas fa-user-plus text-primary"></i> How to Register</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>Registering is the first step to start using the secure file storage system.</p>
+                        
+                        <div class="demo-box">
+                            <h6>📝 Step-by-Step:</h6>
+                            <ol>
+                                <li>Click on the <span class="badge bg-primary">Register</span> button on the home page</li>
+                                <li>Fill in your details:
+                                    <ul>
+                                        <li><strong>Username:</strong> Choose a unique username</li>
+                                        <li><strong>Email:</strong> Your valid email address</li>
+                                        <li><strong>Password:</strong> Must be at least 8 characters</li>
+                                        <li><strong>Confirm Password:</strong> Re-enter your password</li>
+                                    </ul>
+                                </li>
+                                <li>Click the <span class="badge bg-success">Register</span> button</li>
+                                <li>You'll see a success message and be redirected to login</li>
+                            </ol>
+                        </div>
+
+                        <div class="demo-box">
+                            <h6>📋 Example:</h6>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
+                                <p><strong>Username:</strong> johndoe123</p>
+                                <p><strong>Email:</strong> john@example.com</p>
+                                <p><strong>Password:</strong> ••••••••</p>
+                                <p><strong>Confirm Password:</strong> ••••••••</p>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <i class="fas fa-check-circle"></i> 
+                            <strong>Success:</strong> After registration, you'll see "Registration successful! Please login."
+                        </div>
+
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Note:</strong> Your password is securely hashed and never stored in plain text.
+                        </div>
+
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-user-plus"></i> Go to Register
+                        </a>
+                    </div>
+                </div>
+
+                <!-- STEP 2: LOGIN -->
+                <div id="step2" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h4><i class="fas fa-sign-in-alt text-primary"></i> How to Login</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>After registration, you can login to access your secure dashboard.</p>
+
+                        <div class="demo-box">
+                            <h6>📝 Step-by-Step:</h6>
+                            <ol>
+                                <li>Click on the <span class="badge bg-primary">Login</span> button</li>
+                                <li>Enter your <strong>Username</strong> and <strong>Password</strong></li>
+                                <li>Click the <span class="badge bg-success">Login</span> button</li>
+                                <li>You'll be redirected to your dashboard</li>
+                            </ol>
+                        </div>
+
+                        <div class="success-box">
+                            <i class="fas fa-check-circle"></i> 
+                            <strong>Success:</strong> You'll see "Login successful!" and be taken to your dashboard.
+                        </div>
+
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Forgot Password?</strong> Contact the system administrator to reset your password.
+                        </div>
+
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-sign-in-alt"></i> Go to Login
+                        </a>
+                    </div>
+                </div>
+
+                <!-- STEP 3: UPLOAD FILES -->
+                <div id="step3" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h4><i class="fas fa-upload text-primary"></i> How to Upload Files</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>Upload files securely. All files are encrypted before storage.</p>
+
+                        <div class="demo-box">
+                            <h6>📝 Step-by-Step:</h6>
+                            <ol>
+                                <li>On your dashboard, click the <span class="badge bg-primary">Upload File</span> button</li>
+                                <li>A modal window will appear</li>
+                                <li>Click <strong>Choose File</strong> and select your file</li>
+                                <li>Click the <span class="badge bg-success">Upload</span> button</li>
+                                <li>Your file will be uploaded and appear in the file list</li>
+                            </ol>
+                        </div>
+
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-file"></i>
+                                <h6>Supported Files</h6>
+                                <small>PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, GIF</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-weight-hanging"></i>
+                                <h6>Max Size</h6>
+                                <small>100 MB per file</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-lock"></i>
+                                <h6>Encryption</h6>
+                                <small>AES-256 encryption before storage</small>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <strong>Tip:</strong> You can upload multiple files one at a time. Each file is encrypted individually.
+                        </div>
+
+                        <div class="success-box">
+                            <i class="fas fa-check-circle"></i> 
+                            <strong>Success:</strong> You'll see "File uploaded successfully!" and your file will appear in the list.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: SHARE FILES -->
+                <div id="step4" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h4><i class="fas fa-share-alt text-primary"></i> How to Share Files</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>Share files securely with other users with controlled permissions.</p>
+
+                        <div class="demo-box">
+                            <h6>📝 Step-by-Step:</h6>
+                            <ol>
+                                <li>From your dashboard, find the file you want to share</li>
+                                <li>Click the <span class="badge bg-info">Share</span> button next to the file</li>
+                                <li>Enter the username of the person you want to share with</li>
+                                <li>Select permission level:
+                                    <ul>
+                                        <li><strong>Read Only:</strong> Can only view/download the file</li>
+                                        <li><strong>Read & Write:</strong> Can view, download, and modify the file</li>
+                                    </ul>
+                                </li>
+                                <li>Set expiration (optional)</li>
+                                <li>Click <span class="badge bg-success">Share</span></li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <strong>Tip:</strong> The recipient will see the file in their "Shared With Me" section.
+                        </div>
+
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Important:</strong> You can only share files that you own.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: DOWNLOAD FILES -->
+                <div id="step5" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <h4><i class="fas fa-download text-primary"></i> How to Download Files</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>Download your files or files shared with you.</p>
+
+                        <div class="demo-box">
+                            <h6>📝 Step-by-Step:</h6>
+                            <ol>
+                                <li>Find the file in your dashboard or shared files section</li>
+                                <li>Click the <span class="badge bg-success">Download</span> button</li>
+                                <li>The file will be decrypted and downloaded to your device</li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <strong>Tip:</strong> Files are decrypted on-the-fly when you download them.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 6: DELETE FILES -->
+                <div id="step6" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">6</div>
+                        <h4><i class="fas fa-trash text-primary"></i> How to Delete Files</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>Remove files you no longer need.</p>
+
+                        <div class="demo-box">
+                            <h6>📝 Step-by-Step:</h6>
+                            <ol>
+                                <li>Find the file you want to delete</li>
+                                <li>Click the <span class="badge bg-danger">Delete</span> button</li>
+                                <li>Confirm the deletion when prompted</li>
+                                <li>The file will be removed from the system</li>
+                            </ol>
+                        </div>
+
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Warning:</strong> Deletion is permanent. You cannot recover deleted files.
+                        </div>
+
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Note:</strong> You can only delete files that you own.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 7: SECURITY FEATURES -->
+                <div id="step7" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">7</div>
+                        <h4><i class="fas fa-shield-alt text-primary"></i> Security Features</h4>
+                    </div>
+                    <div class="step-content">
+                        <p>Learn about the security features that protect your data.</p>
+
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-lock"></i>
+                                <h6>End-to-End Encryption</h6>
+                                <small>Files are encrypted before leaving your device</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-user-shield"></i>
+                                <h6>Secure Authentication</h6>
+                                <small>Passwords are hashed and never stored in plain text</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-key"></i>
+                                <h6>Access Control</h6>
+                                <small>Fine-grained permissions for file sharing</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-double"></i>
+                                <h6>Data Integrity</h6>
+                                <small>Files are verified to ensure they haven't been tampered with</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-history"></i>
+                                <h6>Audit Logs</h6>
+                                <small>All actions are logged for security monitoring</small>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-clock"></i>
+                                <h6>Expiration</h6>
+                                <small>Shared files can have expiration dates</small>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <i class="fas fa-shield-alt"></i>
+                            <strong>Your data is protected with:</strong>
+                            <ul>
+                                <li><strong>AES-256</strong> - Advanced encryption standard</li>
+                                <li><strong>RSA-2048</strong> - Secure key exchange</li>
+                                <li><strong>SHA-256</strong> - File integrity verification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 8: FAQ -->
+                <div id="step8" class="tutorial-step">
+                    <div class="step-header">
+                        <div class="step-number">8</div>
+                        <h4><i class="fas fa-question-circle text-primary"></i> Frequently Asked Questions</h4>
+                    </div>
+                    <div class="step-content">
+                        <div class="accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                        <i class="fas fa-question me-2"></i> What types of files can I upload?
+                                    </button>
+                                </h2>
+                                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        You can upload: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, and GIF files. 
+                                        Maximum file size is 100MB.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                        <i class="fas fa-question me-2"></i> Is my data secure?
+                                    </button>
+                                </h2>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Yes! All files are encrypted using AES-256 encryption before they leave your device. 
+                                        The system also uses RSA-2048 for secure key exchange and SHA-256 for integrity verification.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                        <i class="fas fa-question me-2"></i> Can I share files with others?
+                                    </button>
+                                </h2>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Yes! You can share files with other users. You can set permissions (Read Only or Read & Write) 
+                                        and even set expiration dates for shared access.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                        <i class="fas fa-question me-2"></i> What if I forget my password?
+                                    </button>
+                                </h2>
+                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Currently, you need to contact the system administrator to reset your password. 
+                                        Password reset feature will be added in future updates.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                        <i class="fas fa-question me-2"></i> How do I verify file integrity?
+                                    </button>
+                                </h2>
+                                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Each file has a SHA-256 hash that can be used to verify it hasn't been tampered with. 
+                                        The system automatically verifies integrity during downloads.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                        <i class="fas fa-question me-2"></i> Can I recover deleted files?
+                                    </button>
+                                </h2>
+                                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        No, file deletion is permanent. Please make sure you want to delete a file before confirming.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back to Top -->
+                <div class="text-center mt-4">
+                    <a href="#" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-up"></i> Back to Top
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
