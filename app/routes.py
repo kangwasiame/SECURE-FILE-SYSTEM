@@ -5,13 +5,15 @@ import smtplib
 import uuid
 from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
+from io import BytesIO
 
-from flask import Blueprint, abort, current_app, flash, jsonify, redirect, render_template, request, send_from_directory, url_for
+from flask import Blueprint, abort, current_app, flash, jsonify, redirect, render_template, request, send_file, send_from_directory, url_for
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
+from app.crypto import decrypt_file, encrypt_file
 from app.models import File, FilePin, FileShare, PinRecovery
 from app.utils import format_file_size, get_file_icon
 
@@ -20,6 +22,15 @@ main_bp = Blueprint('main', __name__)
 
 def allowed_file(filename):
     return bool(filename and filename.strip())
+
+
+def file_bytes(file):
+    path = os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename)
+    with open(path, 'rb') as stored:
+        data = stored.read()
+    if file.filename.endswith('.enc'):
+        return decrypt_file(data, current_app.config['FILE_ENCRYPTION_KEY'])
+    return data
 
 
 @main_bp.get('/')
@@ -62,12 +73,12 @@ def upload_file():
         flash('That file type is not supported.', 'error')
         return redirect(url_for('main.dashboard'))
     original_name = secure_filename(uploaded.filename) or 'uploaded-file'
-    stored_name = f'{uuid.uuid4().hex}_{original_name}'
+    stored_name = f'{uuid.uuid4().hex}_{original_name}.enc'
     path = os.path.join(current_app.config['UPLOAD_FOLDER'], stored_name)
     try:
         data = uploaded.read()
         with open(path, 'wb') as output:
-            output.write(data)
+            output.write(encrypt_file(data, current_app.config['FILE_ENCRYPTION_KEY']))
         stored_file = File(filename=stored_name, original_filename=original_name,
                    file_size=len(data), file_type=uploaded.content_type,
                    file_hash=hashlib.sha256(data).hexdigest(), owner_id=current_user.id)
@@ -97,8 +108,12 @@ def download_file(file_id):
     if not pin.isdigit() or len(pin) != 4 or not check_password_hash(file.pin.pin_hash, pin):
         flash('Incorrect 4-digit PIN.', 'error')
         return render_template('verify_download.html', file=file), 401
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], file.filename,
-                               as_attachment=True, download_name=file.original_filename)
+    try:
+        data = file_bytes(file)
+    except (OSError, ValueError):
+        abort(500, description='The file could not be decrypted.')
+    return send_file(BytesIO(data), as_attachment=True, download_name=file.original_filename,
+                     mimetype=file.file_type or 'application/octet-stream')
 
 
 @main_bp.post('/share/<int:file_id>')
@@ -126,8 +141,12 @@ def download_shared_file(code):
     if not share:
         abort(404)
     file = share.file
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], file.filename,
-                               as_attachment=True, download_name=file.original_filename)
+    try:
+        data = file_bytes(file)
+    except (OSError, ValueError):
+        abort(500, description='The file could not be decrypted.')
+    return send_file(BytesIO(data), as_attachment=True, download_name=file.original_filename,
+                     mimetype=file.file_type or 'application/octet-stream')
 
 
 def send_recovery_code(user, code, filename):

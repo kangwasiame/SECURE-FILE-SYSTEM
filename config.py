@@ -9,6 +9,7 @@ class Config:
     HOST = os.environ.get('HOST', '0.0.0.0')
     PORT = int(os.environ.get('PORT', '5000'))
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-only-change-this-secret')
+    FILE_ENCRYPTION_KEY = os.environ.get('FILE_ENCRYPTION_KEY', SECRET_KEY)
     PERMANENT_SESSION_LIFETIME = timedelta(days=30)
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'DATABASE_URL',
