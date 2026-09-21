@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
-from app.models import File, FilePin, PinRecovery
+from app.models import File, FilePin, FileShare, PinRecovery
 from app.utils import format_file_size, get_file_icon
 
 main_bp = Blueprint('main', __name__)
@@ -97,6 +97,35 @@ def download_file(file_id):
     if not pin.isdigit() or len(pin) != 4 or not check_password_hash(file.pin.pin_hash, pin):
         flash('Incorrect 4-digit PIN.', 'error')
         return render_template('verify_download.html', file=file), 401
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], file.filename,
+                               as_attachment=True, download_name=file.original_filename)
+
+
+@main_bp.post('/share/<int:file_id>')
+@login_required
+def share_file(file_id):
+    file = db.get_or_404(File, file_id)
+    if file.owner_id != current_user.id:
+        abort(403)
+    if not file.share:
+        while True:
+            code = f'{secrets.randbelow(100000000):08d}'
+            if not db.session.scalar(db.select(FileShare).filter_by(code=code)):
+                break
+        file.share = FileShare(code=code)
+        db.session.commit()
+    flash(f'Share code for {file.original_filename}: {file.share.code}', 'success')
+    return redirect(url_for('main.dashboard'))
+
+
+@main_bp.get('/share/<string:code>')
+def download_shared_file(code):
+    if len(code) != 8 or not code.isdigit():
+        abort(404)
+    share = db.session.scalar(db.select(FileShare).filter_by(code=code))
+    if not share:
+        abort(404)
+    file = share.file
     return send_from_directory(current_app.config['UPLOAD_FOLDER'], file.filename,
                                as_attachment=True, download_name=file.original_filename)
 

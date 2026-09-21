@@ -25,6 +25,8 @@ class File(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     pin = db.relationship('FilePin', backref='file', uselist=False,
                           cascade='all, delete-orphan')
+    share = db.relationship('FileShare', backref='file', uselist=False,
+                            cascade='all, delete-orphan')
 
 
 class FilePin(db.Model):
@@ -32,6 +34,13 @@ class FilePin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     file_id = db.Column(db.Integer, db.ForeignKey('file.id'), unique=True, nullable=False)
     pin_hash = db.Column(db.String(255), nullable=False)
+
+
+class FileShare(db.Model):
+    __tablename__ = 'file_shares'
+    id = db.Column(db.Integer, primary_key=True)
+    file_id = db.Column(db.Integer, db.ForeignKey('file.id'), unique=True, nullable=False)
+    code = db.Column(db.String(8), unique=True, nullable=False, index=True)
 
 
 class PinRecovery(db.Model):
