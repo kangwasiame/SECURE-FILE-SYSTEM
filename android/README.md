@@ -22,4 +22,4 @@ Pass the public HTTPS URL when building:
 ./gradlew assembleRelease -PserverUrl=https://your-domain.example/
 ```
 
-The default URL `http://10.0.2.2:5000/` is for an Android emulator reaching Flask on the host computer. A physical phone needs a reachable HTTPS URL or a LAN address configured with `-PserverUrl`.
+The default URL is the current public HTTPS tunnel. Because quick tunnel URLs are temporary, use `-PserverUrl` with your permanent Render URL when it is available. The old local default `http://10.0.2.2:5000/` is for an Android emulator reaching Flask on the host computer. A physical phone needs a reachable HTTPS URL or a LAN address configured with `-PserverUrl`.

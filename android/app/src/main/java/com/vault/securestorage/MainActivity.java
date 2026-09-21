@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowInsets;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -18,12 +20,26 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window window = getWindow();
+        window.setStatusBarColor(0xFFFAF9FF);
+        window.setNavigationBarColor(0xFFFAF9FF);
         webView = new WebView(this);
+        webView.setFitsSystemWindows(true);
+        webView.setOnApplyWindowInsetsListener((view, insets) -> {
+            WindowInsets safeInsets = insets;
+            view.setPadding(0, safeInsets.getSystemWindowInsetTop(), 0,
+                safeInsets.getSystemWindowInsetBottom());
+            return insets;
+        });
         setContentView(webView);
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        settings.setBuiltInZoomControls(false);
+        settings.setDisplayZoomControls(false);
         settings.setAllowFileAccess(true);
         settings.setMediaPlaybackRequiresUserGesture(false);
         webView.setWebViewClient(new WebViewClient());

@@ -14,7 +14,7 @@ android {
         versionName '1.0'
 
         // Override with: ./gradlew assembleDebug -PserverUrl=https://your-domain.example
-        buildConfigField 'String', 'SERVER_URL', "\"${project.findProperty('serverUrl') ?: 'http://10.0.2.2:5000/'}\""
+        buildConfigField 'String', 'SERVER_URL', "\"${project.findProperty('serverUrl') ?: 'https://except-leone-hypothesis-keep.trycloudflare.com/'}\""
     }
 
     buildFeatures {
