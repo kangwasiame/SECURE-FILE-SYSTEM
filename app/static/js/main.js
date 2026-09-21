@@ -13,6 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const demoScreen = document.querySelector('.demo-screen');
+  const demoProgress = document.querySelector('.demo-progress');
+  const guideLead = document.querySelector('.guide .lede');
+  if (demoScreen && demoProgress) {
+    if (guideLead) guideLead.textContent = 'Watch the five-step walkthrough, then create your own private workspace.';
+    const shareScene = document.createElement('div');
+    shareScene.className = 'demo-scene';
+    shareScene.dataset.demoScene = '5';
+    shareScene.innerHTML = '<span class="demo-label">STEP 5</span><strong>Share with a code</strong><span>Give someone the 8-digit code to download the file.</span><div class="demo-field">Share code: 48273106</div><div class="demo-action">Copy share link</div>';
+    demoScreen.appendChild(shareScene);
+    const shareStep = document.createElement('button');
+    shareStep.type = 'button';
+    shareStep.dataset.demoStep = '5';
+    shareStep.setAttribute('aria-label', 'Step 5');
+    demoProgress.appendChild(shareStep);
+  }
+
   const scenes = document.querySelectorAll('[data-demo-scene]');
   const stepButtons = document.querySelectorAll('[data-demo-step]');
   const previous = document.querySelector('.demo-prev');
